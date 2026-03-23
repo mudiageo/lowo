@@ -6,8 +6,9 @@
   import { liveQuery } from "dexie";
   import { Card, CardHeader, CardTitle, CardContent } from "$lib/components/ui/card";
   import { Button } from "$lib/components/ui/button";
+  import ResponsiveFormModal from "$lib/components/layout/ResponsiveFormModal.svelte";
+  import BudgetForm from "$lib/components/features/budget/BudgetForm.svelte";
   import Plus from "@lucide/svelte/icons/plus";
-  import History from "@lucide/svelte/icons/history";
   import Copy from "@lucide/svelte/icons/copy";
 
   const formatter = $derived(new Intl.NumberFormat('en-NG', {
@@ -15,6 +16,8 @@
     currency: appStore.settings?.currency || 'NGN',
     maximumFractionDigits: 0
   }));
+
+  let isModalOpen = $state(false);
 
 </script>
 
@@ -24,7 +27,7 @@
       <h1 class="text-2xl font-heading font-bold tracking-tight">Budgets</h1>
       <p class="text-muted-foreground text-sm">Manage your budget periods.</p>
     </div>
-    <Button href="/budgets/new">
+    <Button onclick={() => isModalOpen = true}>
       <Plus class="w-4 h-4 mr-2" />
       New Budget
     </Button>
@@ -32,12 +35,11 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {#each budgetStore.periods as period}
-      <!-- Let's calculate dates for display -->
       {@const dates = getBudgetPeriodDates(period)}
       {@const isActive = budgetStore.activePeriodId === period.id}
       <Card class="relative overflow-hidden {isActive ? 'border-primary ring-1 ring-primary/50' : ''}">
         {#if isActive}
-          <div class="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg">
+          <div class="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg z-10">
             ACTIVE
           </div>
         {/if}
@@ -62,11 +64,10 @@
         </CardContent>
       </Card>
     {:else}
-      <!-- Empty state -->
       <div class="col-span-full border border-dashed border-border rounded-xl p-12 text-center bg-card/50">
         <h3 class="text-lg font-medium">No Budget Periods</h3>
         <p class="text-muted-foreground text-sm mt-1 max-w-sm mx-auto">You haven't created any budget periods yet. Create a new one to start tracking your spending.</p>
-        <Button class="mt-4" href="/budgets/new">Create Budget</Button>
+        <Button class="mt-4" onclick={() => isModalOpen = true}>Create Budget</Button>
       </div>
     {/each}
   </div>
@@ -81,7 +82,6 @@
         <div class="p-4 bg-card border border-border rounded-xl flex items-center justify-between">
           <div class="flex items-center space-x-3">
             <div class="w-10 h-10 rounded-full flex items-center justify-center bg-primary/10" style="color: {catProg.category.color}">
-              <!-- Dynamic lucide icon mapping is complex in pure SSR without bundle, placeholder for now -->
               <span class="font-bold">{catProg.category.name.charAt(0)}</span>
             </div>
             <div>
@@ -99,3 +99,11 @@
   {/if}
 
 </div>
+
+<ResponsiveFormModal
+	title="New Budget Period"
+	description="Define the duration and total pool for your new budget."
+	bind:open={isModalOpen}
+>
+  <BudgetForm onSaveSuccess={() => isModalOpen = false} />
+</ResponsiveFormModal>

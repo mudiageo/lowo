@@ -25,6 +25,8 @@
     "@eslint/compat": "latest",
     "@eslint/js": "latest",
     "@fontsource-variable/inter": "catalog:",
+    "@fontsource/dm-sans": "catalog:",
+    "@fontsource/jetbrains-mono": "catalog:",
     "@google/generative-ai": "catalog:",
     "@internationalized/date": "catalog:",
     "@lucide/svelte": "catalog:",

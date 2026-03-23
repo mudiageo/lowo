@@ -1,0 +1,17 @@
+{
+  "name": "lowo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ready": "vp fmt && vp lint --type-aware && vp run test -r && vp run build -r",
+    "dev": "vp run website#dev"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "vite-plus": "catalog:"
+  },
+  "packageManager": "pnpm@10.30.3"
+}

@@ -42,28 +42,28 @@
             <!-- dim backdrop -->
             <button class="fixed inset-0 z-40 bg-black/30" onclick={() => fabOpen = false} aria-label="Close"></button>
 
-            <!-- Income option (top) -->
-            <div class="absolute bottom-[72px] z-50 flex flex-col items-center gap-1.5">
-              <button
-                onclick={openIncome}
-                class="flex h-12 w-12 items-center justify-center rounded-full bg-primary shadow-xl hover:scale-105 active:scale-95 transition-transform"
-                aria-label="Log income"
-              >
-                <Banknote class="h-5 w-5 text-primary-foreground" />
-              </button>
-              <span class="rounded-full bg-card border border-border px-2.5 py-0.5 text-[11px] font-semibold shadow">Log Income</span>
-            </div>
-
-            <!-- Expense option (middle) -->
-            <div class="absolute bottom-[140px] z-50 flex flex-col items-center gap-1.5">
+            <!-- Expense option (left) -->
+            <div class="absolute bottom-[20px] left-1/2 -translate-x-[90px] z-50 flex flex-col items-center gap-1.5 animate-in fade-in slide-in-from-right-4 duration-200">
               <button
                 onclick={openExpense}
-                class="flex h-12 w-12 items-center justify-center rounded-full bg-destructive shadow-xl hover:scale-105 active:scale-95 transition-transform"
+                class="flex h-12 w-12 items-center justify-center rounded-full bg-destructive shadow-xl hover:scale-110 active:scale-90 transition-transform"
                 aria-label="Add expense"
               >
                 <TrendingDown class="h-5 w-5 text-white" />
               </button>
-              <span class="rounded-full bg-card border border-border px-2.5 py-0.5 text-[11px] font-semibold shadow">Add Expense</span>
+              <span class="rounded-full bg-card/80 backdrop-blur-sm border border-border px-2.5 py-0.5 text-[10px] font-bold shadow text-destructive tracking-tight">EXPENSE</span>
+            </div>
+
+            <!-- Income option (right) -->
+            <div class="absolute bottom-[20px] left-1/2 translate-x-[42px] z-50 flex flex-col items-center gap-1.5 animate-in fade-in slide-in-from-left-4 duration-200">
+              <button
+                onclick={openIncome}
+                class="flex h-12 w-12 items-center justify-center rounded-full bg-primary shadow-xl hover:scale-110 active:scale-90 transition-transform"
+                aria-label="Log income"
+              >
+                <Banknote class="h-5 w-5 text-primary-foreground" />
+              </button>
+              <span class="rounded-full bg-card/80 backdrop-blur-sm border border-border px-2.5 py-0.5 text-[10px] font-bold shadow text-primary tracking-tight">INCOME</span>
             </div>
           {/if}
 

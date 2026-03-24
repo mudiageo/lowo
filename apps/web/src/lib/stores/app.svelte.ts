@@ -39,7 +39,7 @@ export class AppStore {
         theme: "system",
         aiEnabled: false,
       };
-      await db.appSettings.put(this.settings);
+      await db.appSettings.put($state.snapshot(this.settings) as AppSettings);
       setMode("system");
     }
 
@@ -58,7 +58,7 @@ export class AppStore {
     if (!this.settings) return;
     const newSettings = { ...this.settings, ...updates };
     this.settings = newSettings; // Update local state immediately to avoid race conditions
-    await db.appSettings.put(newSettings);
+    await db.appSettings.put($state.snapshot(newSettings) as AppSettings);
 
     if (updates.theme) {
       setMode(updates.theme as any);

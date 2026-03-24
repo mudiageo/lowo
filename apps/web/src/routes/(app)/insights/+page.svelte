@@ -46,7 +46,7 @@
 				spendingProgress: budgetStore.spendingProgress,
 				recentExpenses: expenses
 					.slice(0, 50)
-					.map((e) => ({ amount: e.amount, date: e.date, note: e.notes })),
+					.map((e) => ({ amount: e.amount, date: e.date, note: e.note })),
 				recentIncome: incomes.slice(0, 10).map((i) => ({ amount: i.amount, label: i.label }))
 			};
 
@@ -79,7 +79,9 @@
 				content: output,
 				type: 'general',
 				isRead: true,
-				createdAt: new Date()
+				createdAt: new Date(),
+				generatedAt: new Date(),
+				model: 'gemini-2.5-flash'
 			});
 		} catch (e: any) {
 			console.error(e);

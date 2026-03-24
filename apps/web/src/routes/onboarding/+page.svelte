@@ -2,6 +2,7 @@
   import { appStore } from "$lib/stores/app.svelte";
   import { budgetStore } from "$lib/stores/budget.svelte";
   import { db } from "$lib/db";
+  import { hashPin } from "$lib/stores/lock.svelte";
   import { goto } from "$app/navigation";
   import { Button } from "$lib/components/ui/button";
   import { Input } from "$lib/components/ui/input";
@@ -26,6 +27,7 @@
   let budgetTotal = $state("");
   
   let pinEnabled = $state(false);
+  let pin = $state("");
   let geminiApiKey = $state("");
 
   async function completeOnboarding() {
@@ -36,8 +38,10 @@
         userName,
         currency,
         pinEnabled,
+        pinHash: pinEnabled ? await hashPin(pin) : undefined,
         geminiApiKey,
-        onboardingComplete: true
+        onboardingComplete: true,
+        hasCompletedOnboarding: true
       });
 
       // 2. Add Income if provided
@@ -47,7 +51,9 @@
           label: "Primary Income",
           amount: Number(incomeAmount),
           frequency: incomeFrequency,
-          date: new Date()
+          date: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date()
         });
       }
 
@@ -207,7 +213,6 @@
               <p class="text-sm text-muted-foreground mt-1 text-balance">
                 Require a 4-digit PIN when opening Lowo. This keeps your financial data out of sight from snooping friends.
               </p>
-            </div>
           </div>
           <div class="flex space-x-2">
             <Button type="button" variant={pinEnabled ? "default" : "outline"} class="w-1/2" onclick={() => pinEnabled = true}>
@@ -217,6 +222,21 @@
               Disabled
             </Button>
           </div>
+          
+          {#if pinEnabled}
+            <div class="space-y-2 animate-in fade-in slide-in-from-top-2">
+              <Label for="pin">Set 4-Digit PIN</Label>
+              <Input
+                id="pin"
+                type="password"
+                inputmode="numeric"
+                maxlength={4}
+                bind:value={pin}
+                placeholder="0000"
+                class="text-center text-2xl tracking-[1em]"
+              />
+            </div>
+          {/if}
         </div>
 
       {:else}

@@ -7,13 +7,17 @@
   import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "$lib/components/ui/card";
   import Save from "@lucide/svelte/icons/save";
   import Trash2 from "@lucide/svelte/icons/trash-2";
+  import { lockStore, hashPin } from "$lib/stores/lock.svelte";
   
   // Clone settings to form to avoid auto-updating until saved
   let formSettings = $state({
     userName: appStore.settings?.userName || "",
     currency: appStore.settings?.currency || "NGN",
     theme: appStore.settings?.theme || "dark",
-    geminiApiKey: appStore.settings?.geminiApiKey || ""
+    geminiApiKey: appStore.settings?.geminiApiKey || "",
+    pinEnabled: appStore.settings?.pinEnabled || false,
+    pinHash: appStore.settings?.pinHash,
+    biometricEnabled: appStore.settings?.biometricEnabled || false,
   });
 
   let isSaving = $state(false);
@@ -99,6 +103,73 @@
           </div>
         </div>
 
+      </CardContent>
+    </Card>
+
+      </CardContent>
+    </Card>
+
+    <Card class="mt-6">
+      <CardHeader>
+        <CardTitle>Security</CardTitle>
+        <CardDescription>Protect your financial data with local authentication.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-6">
+        <div class="flex items-center justify-between">
+          <div class="space-y-0.5">
+            <Label>PIN Protection</Label>
+            <p class="text-xs text-muted-foreground">Require a 4-digit PIN to open the app.</p>
+          </div>
+          <button
+            type="button"
+            onclick={() => {
+              if (!formSettings.pinEnabled) {
+                const pin = prompt("Enter a 4-digit PIN:");
+                if (pin?.length === 4) {
+                  hashPin(pin).then(h => {
+                    formSettings.pinHash = h;
+                    formSettings.pinEnabled = true;
+                  });
+                }
+              } else {
+                formSettings.pinEnabled = false;
+                formSettings.pinHash = undefined;
+                formSettings.biometricEnabled = false;
+              }
+            }}
+            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {formSettings.pinEnabled ? 'bg-primary' : 'bg-muted'}"
+          >
+            <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-background shadow ring-0 transition duration-200 ease-in-out {formSettings.pinEnabled ? 'translate-x-5' : 'translate-x-0'}"></span>
+          </button>
+        </div>
+
+        {#if formSettings.pinEnabled}
+          <div class="flex items-center justify-between border-t border-border pt-4">
+            <div class="space-y-0.5">
+              <Label>Biometric Auth</Label>
+              <p class="text-xs text-muted-foreground">Unlock with fingerprint or face ID.</p>
+            </div>
+            <button
+              type="button"
+              onclick={async () => {
+                if (!formSettings.biometricEnabled) {
+                  const ok = await lockStore.registerBiometric();
+                  if (ok) {
+                    formSettings.biometricEnabled = true;
+                    alert("Biometric verification enrolled!");
+                  } else {
+                    alert("Biometric enrollment failed. Try again.");
+                  }
+                } else {
+                  formSettings.biometricEnabled = false;
+                }
+              }}
+              class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {formSettings.biometricEnabled ? 'bg-primary' : 'bg-muted'}"
+            >
+              <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-background shadow ring-0 transition duration-200 ease-in-out {formSettings.biometricEnabled ? 'translate-x-5' : 'translate-x-0'}"></span>
+            </button>
+          </div>
+        {/if}
       </CardContent>
     </Card>
 

@@ -8,6 +8,7 @@ export class AppStore {
   isOnline: boolean = $state(true);
   initialized: boolean = $state(false);
   showQuickAdd: boolean = $state(false);
+  showQuickAddIncome: boolean = $state(false);
 
   constructor() {
     this.init();

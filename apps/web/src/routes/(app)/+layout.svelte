@@ -3,13 +3,19 @@
   import BottomNav from "$lib/components/layout/BottomNav.svelte";
   import CommandPalette from "$lib/components/layout/CommandPalette.svelte";
   import QuickAddModal from "$lib/components/layout/QuickAddModal.svelte";
+  import QuickAddIncomeModal from "$lib/components/layout/QuickAddIncomeModal.svelte";
   import PWAInstallBanner from "$lib/components/layout/PWAInstallBanner.svelte";
   import MobileTopBar from "$lib/components/layout/MobileTopBar.svelte";
+  import LockScreen from "$lib/components/layout/LockScreen.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar";
   import { appStore } from "$lib/stores/app.svelte";
+  import { lockStore } from "$lib/stores/lock.svelte";
   import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
   
   let { children } = $props();
+
+  onMount(() => lockStore.init());
 
   // Protect the route - check if onboarding is complete
   $effect(() => {
@@ -37,7 +43,9 @@
     
     <CommandPalette />
     <QuickAddModal />
+    <QuickAddIncomeModal />
     <PWAInstallBanner />
+    {#if lockStore.isLocked}<LockScreen />{/if}
   </div>
 </Sidebar.Provider>
 

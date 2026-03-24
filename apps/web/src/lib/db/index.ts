@@ -32,6 +32,17 @@ export class LowoDB extends Dexie {
       aiInsights: 'id, budgetPeriodId, type',
       appSettings: 'id'
     });
+    // v2: biometric fields added to appSettings (no structural change needed — IndexedDB is schemaless)
+    this.version(2).stores({
+      budgetPeriods: 'id, startDate, periodType',
+      budgetCategories: 'id, budgetPeriodId, isNigerianDefault',
+      expenses: 'id, budgetPeriodId, categoryId, date',
+      incomes: 'id, date, frequency',
+      savingsGoals: 'id, targetDate',
+      savingsContributions: 'id, goalId, date',
+      aiInsights: 'id, budgetPeriodId, type, createdAt',
+      appSettings: 'id'
+    });
   }
 }
 

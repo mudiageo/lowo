@@ -3,34 +3,86 @@
   import { appStore } from "$lib/stores/app.svelte";
   import LayoutDashboard from "@lucide/svelte/icons/layout-dashboard";
   import Wallet from "@lucide/svelte/icons/wallet";
-  import Plus from "@lucide/svelte/icons/plus";
   import PiggyBank from "@lucide/svelte/icons/piggy-bank";
   import Sparkles from "@lucide/svelte/icons/sparkles";
+  import Plus from "@lucide/svelte/icons/plus";
+  import X from "@lucide/svelte/icons/x";
+  import TrendingDown from "@lucide/svelte/icons/trending-down";
+  import Banknote from "@lucide/svelte/icons/banknote";
   import { page } from "$app/state";
 
-  const links = [
+  const navLinks = [
     { href: "/dashboard", icon: LayoutDashboard, label: "Home" },
-    { href: "/budgets", icon: Wallet, label: "Budget" },
-    { href: "/expenses/add", icon: Plus, label: "Add", isFab: true },
-    { href: "/savings", icon: PiggyBank, label: "Savings" },
-    { href: "/insights", icon: Sparkles, label: "Insights" }
+    { href: "/budgets",   icon: Wallet,          label: "Budget" },
+    null, // FAB placeholder
+    { href: "/savings",   icon: PiggyBank,        label: "Savings" },
+    { href: "/insights",  icon: Sparkles,         label: "Insights" },
   ];
+
+  let fabOpen = $state(false);
+
+  function openExpense() {
+    fabOpen = false;
+    appStore.showQuickAdd = true;
+  }
+
+  function openIncome() {
+    fabOpen = false;
+    appStore.showQuickAddIncome = true;
+  }
 </script>
 
-<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-lg border-t border-border pb-[env(safe-area-inset-bottom)]">
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-t border-border pb-[env(safe-area-inset-bottom)]">
   <div class="flex items-center justify-around px-2 h-16 relative">
-    {#each links as link}
-      {#if link.isFab}
-        <button 
-          onclick={() => appStore.showQuickAdd = true}
-          class="absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 bg-primary text-primary-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform"
-          aria-label={link.label}
-        >
-          <Plus size={24} />
-        </button>
+    {#each navLinks as link}
+      {#if link === null}
+        <div class="relative flex flex-col items-center justify-center w-16">
+
+          {#if fabOpen}
+            <!-- dim backdrop -->
+            <button class="fixed inset-0 z-40 bg-black/30" onclick={() => fabOpen = false} aria-label="Close"></button>
+
+            <!-- Income option (top) -->
+            <div class="absolute bottom-[72px] z-50 flex flex-col items-center gap-1.5">
+              <button
+                onclick={openIncome}
+                class="flex h-12 w-12 items-center justify-center rounded-full bg-primary shadow-xl hover:scale-105 active:scale-95 transition-transform"
+                aria-label="Log income"
+              >
+                <Banknote class="h-5 w-5 text-primary-foreground" />
+              </button>
+              <span class="rounded-full bg-card border border-border px-2.5 py-0.5 text-[11px] font-semibold shadow">Log Income</span>
+            </div>
+
+            <!-- Expense option (middle) -->
+            <div class="absolute bottom-[140px] z-50 flex flex-col items-center gap-1.5">
+              <button
+                onclick={openExpense}
+                class="flex h-12 w-12 items-center justify-center rounded-full bg-destructive shadow-xl hover:scale-105 active:scale-95 transition-transform"
+                aria-label="Add expense"
+              >
+                <TrendingDown class="h-5 w-5 text-white" />
+              </button>
+              <span class="rounded-full bg-card border border-border px-2.5 py-0.5 text-[11px] font-semibold shadow">Add Expense</span>
+            </div>
+          {/if}
+
+          <!-- Main FAB -->
+          <button
+            onclick={() => fabOpen = !fabOpen}
+            class={cn(
+              "absolute -top-6 left-1/2 -translate-x-1/2 z-50 w-14 h-14 text-primary-foreground rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-105 active:scale-95",
+              fabOpen ? "bg-foreground rotate-45" : "bg-primary"
+            )}
+            aria-label="Quick add"
+          >
+            <Plus size={26} />
+          </button>
+        </div>
       {:else}
-        <a 
+        <a
           href={link.href}
+          onclick={() => { fabOpen = false; }}
           class={cn(
             "flex flex-col items-center justify-center w-full h-full text-muted-foreground transition-colors",
             page.url.pathname.startsWith(link.href) && "text-primary font-medium"

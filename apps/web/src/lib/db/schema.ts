@@ -37,8 +37,10 @@ export interface Income {
   id: string;
   label: string;
   amount: number;
-  frequency: "one_time" | "weekly" | "biweekly" | "monthly" | "irregular";
+  frequency: "one_time" | "weekly" | "biweekly" | "monthly" | "yearly" | "irregular";
   date: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface SavingsGoal {
@@ -63,20 +65,25 @@ export interface SavingsContribution {
 export interface AIInsight {
   id: string;
   generatedAt: Date;
+  createdAt: Date;
   budgetPeriodId: string;
-  type: "spending_analysis" | "savings_coach" | "bill_prediction" | "personality";
-  content: string; // JSON string of structured insight
-  model: string; // e.g. "gemini-2.5-flash"
+  type: "spending_analysis" | "savings_coach" | "bill_prediction" | "personality" | "general";
+  content: string;
+  model: string;
+  isRead?: boolean;
 }
 
 export interface AppSettings {
   id: "singleton";
-  currency: "NGN" | "USD";
+  currency: "NGN" | "USD" | "GBP" | "EUR";
   userName: string;
-  onboardingComplete: boolean;
+  onboardingComplete?: boolean;
+  hasCompletedOnboarding?: boolean;
   pinEnabled: boolean;
   pinHash?: string;
+  biometricEnabled?: boolean;
+  biometricCredentialId?: string;
   theme: "light" | "dark" | "system";
   aiEnabled: boolean;
-  geminiApiKey?: string; // user provides own key
+  geminiApiKey?: string;
 }

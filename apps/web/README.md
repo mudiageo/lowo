@@ -1,10 +1,11 @@
 # Lowo Application
 
-Lowo is a Nigerian-context personal budget planner designed to act like a robust, native mobile application on the web. Built specifically with a local-first philosophy, it operates fully offline and stores all your exact financial metadata in your device using IndexedDB, syncing to the cloud only if toggled on. 
+Lowo is a Nigerian-context personal budget planner designed to act like a robust, native mobile application on the web. Built specifically with a local-first philosophy, it operates fully offline and stores all your exact financial metadata in your device using IndexedDB, syncing to the cloud only if toggled on.
 
 ## Tech Stack
 
 This project was built utilizing cutting-edge web technologies:
+
 - **Framework**: [SvelteKit 2](https://kit.svelte.dev/) with **Svelte 5 Runes** (compiled natively, no virtual DOM).
 - **Toolchain**: [Vite+](https://vitejs.dev/) monorepo structure.
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & [shadcn-svelte](https://www.shadcn-svelte.com/) using raw Oklch styling.

@@ -1,4 +1,4 @@
-import * as v from 'valibot';
+import * as v from "valibot";
 
 export const CreateIncomeSchema = v.object({
   label: v.pipe(v.string(), v.minLength(1, "Label is required")),

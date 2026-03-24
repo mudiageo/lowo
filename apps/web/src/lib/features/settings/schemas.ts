@@ -1,4 +1,4 @@
-import * as v from 'valibot';
+import * as v from "valibot";
 
 export const AppSettingsSchema = v.object({
   currency: v.picklist(["NGN", "USD"]),

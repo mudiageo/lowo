@@ -1,6 +1,6 @@
-import { db } from '../db';
-import type { AppSettings, BudgetPeriod } from '../db/schema';
-import { liveQuery } from 'dexie';
+import { db } from "../db";
+import type { AppSettings, BudgetPeriod } from "../db/schema";
+import { liveQuery } from "dexie";
 
 export class AppStore {
   settings: AppSettings | null = $state(null);
@@ -12,10 +12,10 @@ export class AppStore {
 
   constructor() {
     this.init();
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       this.isOnline = navigator.onLine;
-      window.addEventListener('online', () => (this.isOnline = true));
-      window.addEventListener('offline', () => (this.isOnline = false));
+      window.addEventListener("online", () => (this.isOnline = true));
+      window.addEventListener("offline", () => (this.isOnline = false));
     }
   }
 
@@ -33,7 +33,7 @@ export class AppStore {
         onboardingComplete: false,
         pinEnabled: false,
         theme: "system",
-        aiEnabled: false
+        aiEnabled: false,
       };
       await db.appSettings.put(this.settings);
     }

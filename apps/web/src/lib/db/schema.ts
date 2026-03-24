@@ -1,11 +1,11 @@
-import Dexie, { type Table } from 'dexie';
+import Dexie, { type Table } from "dexie";
 
 export interface BudgetPeriod {
   id: string; // cuid or uuid
   name: string;
   periodType: "daily" | "weekly" | "biweekly" | "monthly" | "custom_days" | "calendar_anchored";
   customDays?: number; // used when periodType = "custom_days"
-  anchorDay?: number;  // 1-28, used when periodType = "calendar_anchored"
+  anchorDay?: number; // 1-28, used when periodType = "calendar_anchored"
   startDate: Date;
   currency: "NGN" | "USD";
   totalAmount: number;

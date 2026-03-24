@@ -1,4 +1,4 @@
-import * as v from 'valibot';
+import * as v from "valibot";
 
 export const CreateExpenseSchema = v.object({
   categoryId: v.pipe(v.string(), v.minLength(1, "Category is required")),

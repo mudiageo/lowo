@@ -17,6 +17,13 @@
   let step = $state(1);
   let loading = $state(false);
 
+  // If already complete, avoid re-onboarding
+  $effect(() => {
+    if (appStore.initialized && appStore.settings?.onboardingComplete) {
+      goto('/dashboard');
+    }
+  });
+
   // Form Data
   let userName = $state("");
   let currency = $state<"NGN" | "USD">("NGN");
@@ -213,7 +220,9 @@
               <p class="text-sm text-muted-foreground mt-1 text-balance">
                 Require a 4-digit PIN when opening Lowo. This keeps your financial data out of sight from snooping friends.
               </p>
+            </div>
           </div>
+          
           <div class="flex space-x-2">
             <Button type="button" variant={pinEnabled ? "default" : "outline"} class="w-1/2" onclick={() => pinEnabled = true}>
               Enabled

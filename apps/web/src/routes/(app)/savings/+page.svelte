@@ -28,10 +28,10 @@
 
   // Load goals with progress
   const goalsWithProgress = liveQuery(async () => {
-    const goals = await db.savingsGoals.sortBy('targetDate');
+    const goals = await db.savingsGoals.toArray();
     const result = [];
     for (const goal of goals) {
-      const contributions = await db.savingsContributions.where('savingsGoalId').equals(goal.id).toArray();
+      const contributions = await db.savingsContributions.where('goalId').equals(goal.id).toArray();
       const currentAmount = contributions.reduce((sum, c) => sum + c.amount, 0);
       result.push({
         ...goal,
@@ -64,11 +64,10 @@
         name: result.output.name,
         targetAmount: result.output.targetAmount,
         targetDate: result.output.targetDate,
-        icon: result.output.icon,
-        color: result.output.color,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        isCompleted: false
+        icon: result.output.icon || 'target',
+        color: result.output.color || color,
+        savedAmount: 0,
+        createdAt: new Date()
       });
       // Reset form
       name = "";

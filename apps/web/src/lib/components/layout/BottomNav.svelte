@@ -1,5 +1,6 @@
 <script lang="ts">
   import { cn } from "$lib/utils";
+  import { appStore } from "$lib/stores/app.svelte";
   import LayoutDashboard from "@lucide/svelte/icons/layout-dashboard";
   import Wallet from "@lucide/svelte/icons/wallet";
   import Plus from "@lucide/svelte/icons/plus";

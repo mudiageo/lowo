@@ -4,6 +4,7 @@
   import CommandPalette from "$lib/components/layout/CommandPalette.svelte";
   import QuickAddModal from "$lib/components/layout/QuickAddModal.svelte";
   import PWAInstallBanner from "$lib/components/layout/PWAInstallBanner.svelte";
+  import MobileTopBar from "$lib/components/layout/MobileTopBar.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar";
   import { appStore } from "$lib/stores/app.svelte";
   import { goto } from "$app/navigation";
@@ -23,7 +24,7 @@
   <div class="min-h-screen bg-background text-foreground flex w-full h-full">
     <DesktopSidebar />
 
-    <Sidebar.Inset class="flex-1 w-full flex flex-col pt-6 md:pt-0 pb-20 md:pb-0 bg-transparent relative">
+    <Sidebar.Inset class="flex-1 w-full flex flex-col pt-14 md:pt-0 pb-20 md:pb-0 bg-transparent relative">
       <main class="flex-1 max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative">
         {#if appStore.initialized}
           {@render children()}
@@ -31,6 +32,7 @@
       </main>
     </Sidebar.Inset>
 
+    <MobileTopBar />
     <BottomNav />
     
     <CommandPalette />

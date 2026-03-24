@@ -90,6 +90,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>AI Insights — Lowo</title>
+</svelte:head>
+
 <div class="mx-auto max-w-4xl space-y-6 pb-24 md:pb-6">
 	<div class="flex items-center space-x-3">
 		<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20 text-primary">
@@ -186,22 +190,38 @@
 			</div>
 
 			<div class="lg:col-span-1">
-				<Card>
-					<CardHeader>
-						<CardTitle class="flex items-center space-x-2 text-base">
-							<History class="h-4 w-4" />
-							<span>History</span>
-						</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div
-							class="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground"
-						>
-							View past insights (Coming soon)
-						</div>
-					</CardContent>
-				</Card>
-			</div>
+			<Card>
+				<CardHeader>
+					<CardTitle class="flex items-center space-x-2 text-base">
+						<History class="h-4 w-4" />
+						<span>History</span>
+					</CardTitle>
+				</CardHeader>
+				<CardContent>
+					{#await db.aiInsights.orderBy('createdAt').reverse().limit(5).toArray()}
+						<p class="text-xs text-muted-foreground text-center py-4">Loading...</p>
+					{:then insights}
+						{#if insights.length === 0}
+							<div class="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+								No past insights yet.
+							</div>
+						{:else}
+							<div class="space-y-2">
+								{#each insights as insight}
+									<button
+										class="w-full text-left rounded-lg border border-border bg-muted/30 p-3 text-xs hover:bg-muted/60 transition-colors"
+										onclick={() => latestInsight = { content: insight.content, generatedAt: new Date(insight.createdAt) }}
+									>
+										<p class="font-medium text-foreground/80 line-clamp-1">{insight.content.split('\n')[0].replace(/^##?\s*/, '').replace(/\*\*/g, '').slice(0, 40)}...</p>
+										<p class="mt-1 text-muted-foreground">{new Date(insight.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+									</button>
+								{/each}
+							</div>
+						{/if}
+					{/await}
+				</CardContent>
+			</Card>
 		</div>
-	{/if}
+	</div>
+{/if}
 </div>

@@ -106,6 +106,10 @@
 
 </script>
 
+<svelte:head>
+	<title>Savings Goals — Lowo</title>
+</svelte:head>
+
 <div class="space-y-6 pb-24 md:pb-6">
   
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

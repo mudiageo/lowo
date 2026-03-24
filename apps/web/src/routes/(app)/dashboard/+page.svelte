@@ -63,6 +63,10 @@
 	const prog = $derived(budgetStore.spendingProgress);
 </script>
 
+<svelte:head>
+	<title>Dashboard — Lowo</title>
+</svelte:head>
+
 <div class="space-y-6 pb-24 md:pb-6">
 	<!-- Header -->
 	<div class="flex items-center justify-between">
@@ -198,4 +202,6 @@
 			</Card>
 		</div>
 	{/if}
+
+	<!-- Floating Add Button (Mobile Only) since BottomNav handles it, we can keep it out or just rely on BottomNav -->
 </div>

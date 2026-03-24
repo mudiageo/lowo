@@ -12,6 +12,11 @@
 	);
 </script>
 
+<svelte:head>
+	<title>Lowo — Your Budget, Your Control</title>
+	<meta name="description" content="Local-first personal budget planner for Nigeria. Track expenses, set savings goals, and get AI insights — all on your device." />
+</svelte:head>
+
 <div class="min-h-screen bg-background text-foreground selection:bg-primary/30">
 	<!-- Navigation -->
 	<header

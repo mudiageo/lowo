@@ -23,6 +23,10 @@
 	let isModalOpen = $state(false);
 </script>
 
+<svelte:head>
+	<title>Budgets — Lowo</title>
+</svelte:head>
+
 <div class="space-y-6 pb-24 md:pb-6">
 	<div class="flex items-center justify-between">
 		<div>

@@ -1,34 +1,59 @@
 {
-  "name": "Lowo Budget Planner",
+  "name": "Lowo — Budget Planner",
   "short_name": "Lowo",
   "description": "Premium Nigerian-context personal budget planner. Offline capable.",
   "start_url": "/dashboard",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0A0A0F",
   "theme_color": "#00D084",
   "icons": [
     {
-      "src": "/favicon.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
     },
     {
-      "src": "/favicon.png",
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "categories": ["finance", "productivity"],
   "orientation": "portrait",
   "dir": "ltr",
   "lang": "en-NG",
+  "screenshots": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "390x844",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "Lowo Dashboard"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Log Expense",
       "short_name": "Expense",
       "description": "Quickly add a new expense",
       "url": "/expenses",
-      "icons": [{ "src": "/favicon.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Savings Goals",
+      "short_name": "Savings",
+      "description": "View your savings goals",
+      "url": "/savings",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
     }
   ]
 }

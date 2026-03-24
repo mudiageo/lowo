@@ -3,6 +3,7 @@
   import { appStore } from "$lib/stores/app.svelte";
   import * as v from "valibot";
   import { CreateBudgetPeriodSchema } from "$lib/features/budget/schemas";
+  import { getBudgetPeriodDates } from "$lib/features/budget/utils";
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
   import { Button } from "$lib/components/ui/button";
@@ -10,17 +11,32 @@
   import Plus from "@lucide/svelte/icons/plus";
   import Save from "@lucide/svelte/icons/save";
   import Trash2 from "@lucide/svelte/icons/trash-2";
+  import CalendarDays from "@lucide/svelte/icons/calendar-days";
 
   let { onSaveSuccess } = $props<{ onSaveSuccess: () => void }>();
 
   let name = $state("");
   let type = $state<"daily"| "weekly"| "biweekly"| "monthly"| "custom_days"| "calendar_anchored">("monthly");
   let customDays = $state(1);
-  let anchorDay = $state(1);
+  let anchorDay = $state(25); // default: 25th (salary day)
   let startDate = $state(new Date().toISOString().split('T')[0]);
   let totalAmount = $state("");
   let errors = $state<Record<string, string>>({});
   let isSaving = $state(false);
+
+  // Compute end date preview
+  const endDatePreview = $derived.by(() => {
+    if (!startDate) return null;
+    try {
+      const fakePeriod = {
+        id: '', name: '', startDate: new Date(startDate), periodType: type,
+        customDays: Number(customDays), anchorDay: Number(anchorDay),
+        currency: 'NGN' as const, totalAmount: 0, createdAt: new Date()
+      };
+      const { end } = getBudgetPeriodDates(fakePeriod);
+      return end;
+    } catch { return null; }
+  });
 
   let categories = $state([
     { id: crypto.randomUUID(), name: "Food", color: "#EF4444", allocated: "" },
@@ -111,7 +127,7 @@
           <option value="biweekly">Bi-weekly</option>
           <option value="monthly">Monthly</option>
           <option value="custom_days">Custom Days</option>
-          <option value="calendar_anchored">Calendar Anchored</option>
+          <option value="calendar_anchored">📅 Calendar-Anchored (Salary Day)</option>
         </select>
       </div>
       <div class="space-y-2">
@@ -120,6 +136,15 @@
         {#if errors.startDate}<p class="text-xs text-destructive">{errors.startDate}</p>{/if}
       </div>
     </div>
+
+    <!-- End date preview -->
+    {#if endDatePreview}
+      <div class="flex items-center space-x-2 rounded-lg bg-primary/5 border border-primary/20 px-3 py-2 text-sm">
+        <CalendarDays class="h-4 w-4 text-primary flex-shrink-0" />
+        <span class="text-muted-foreground">Budget ends on</span>
+        <span class="font-medium text-foreground">{endDatePreview.toLocaleDateString(undefined, { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })}</span>
+      </div>
+    {/if}
 
     {#if type === "custom_days"}
         <div class="space-y-2">

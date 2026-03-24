@@ -7,7 +7,10 @@
   import PiggyBank from "@lucide/svelte/icons/piggy-bank";
   import Sparkles from "@lucide/svelte/icons/sparkles";
   import Settings from "@lucide/svelte/icons/settings";
+  import TrendingDown from "@lucide/svelte/icons/trending-down";
   import { page } from "$app/state";
+  import { appStore } from "$lib/stores/app.svelte";
+  import { budgetStore } from "$lib/stores/budget.svelte";
 
   const mainLinks = [
     { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", shortcut: null },
@@ -17,6 +20,13 @@
     { href: "/savings", icon: PiggyBank, label: "Savings", shortcut: "S" },
     { href: "/insights", icon: Sparkles, label: "AI Insights", shortcut: "A" }
   ];
+
+  const prog = $derived(budgetStore.spendingProgress);
+  const formatter = $derived(new Intl.NumberFormat('en-NG', {
+    style: 'currency',
+    currency: appStore.settings?.currency || 'NGN',
+    maximumFractionDigits: 0
+  }));
 </script>
 
 <Sidebar.Root class="hidden md:flex bg-card/50 border-r border-border min-h-screen">
@@ -27,7 +37,37 @@
       </div>
       <span class="font-heading font-bold text-xl tracking-tight text-foreground">Lowo.</span>
     </div>
+    <!-- User greeting -->
+    {#if appStore.settings?.userName}
+      <p class="mt-3 text-xs text-muted-foreground">
+        Welcome back, <span class="font-medium text-foreground">{appStore.settings.userName}</span>
+      </p>
+    {/if}
   </Sidebar.Header>
+
+  <!-- Quick Stats Card -->
+  {#if budgetStore.activePeriod}
+    <div class="mx-3 mb-2 rounded-xl bg-primary/10 border border-primary/20 p-3">
+      <p class="text-[10px] font-medium uppercase tracking-wider text-primary mb-2">{budgetStore.activePeriod.name}</p>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="font-mono text-base font-bold text-foreground">{formatter.format(prog.totalSpent)}</p>
+          <p class="text-[10px] text-muted-foreground">of {formatter.format(prog.totalBudget)}</p>
+        </div>
+        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-card border border-border">
+          <TrendingDown class="h-4 w-4 {prog.percentage > 90 ? 'text-destructive' : 'text-primary'}" />
+        </div>
+      </div>
+      <!-- Mini progress bar -->
+      <div class="mt-2 h-1.5 w-full rounded-full bg-muted overflow-hidden">
+        <div
+          class="h-full rounded-full transition-all {prog.percentage > 90 ? 'bg-destructive' : 'bg-primary'}"
+          style="width: {Math.min(100, prog.percentage)}%"
+        ></div>
+      </div>
+      <p class="mt-1 text-right text-[10px] text-muted-foreground">{prog.percentage}% used</p>
+    </div>
+  {/if}
 
   <Sidebar.Content>
     <Sidebar.Group>

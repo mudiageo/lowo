@@ -1,17 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <title>Lowo</title>
-  <!-- Dark background circle -->
   <circle cx="32" cy="32" r="32" fill="#0A0A0F"/>
-  <!-- Stylised naira / coin ring -->
   <circle cx="32" cy="32" r="24" stroke="#00D084" stroke-width="3" opacity="0.25"/>
-  <!-- Bold ₦ symbol outer left bar -->
   <rect x="18" y="16" width="4" height="32" rx="2" fill="#00D084"/>
-  <!-- Bold ₦ symbol outer right bar -->
   <rect x="42" y="16" width="4" height="32" rx="2" fill="#00D084"/>
-  <!-- Upper horizontal bar -->
   <rect x="16" y="27" width="32" height="4" rx="2" fill="#00FF9F"/>
-  <!-- Lower horizontal bar -->
   <rect x="16" y="33" width="32" height="4" rx="2" fill="#00FF9F"/>
-  <!-- Diagonal from top-left bar to bottom-right bar -->
   <line x1="22" y1="16" x2="42" y2="48" stroke="#00D084" stroke-width="4" stroke-linecap="round"/>
 </svg>

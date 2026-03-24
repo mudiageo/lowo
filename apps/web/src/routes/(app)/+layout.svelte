@@ -3,6 +3,7 @@
   import BottomNav from "$lib/components/layout/BottomNav.svelte";
   import CommandPalette from "$lib/components/layout/CommandPalette.svelte";
   import QuickAddModal from "$lib/components/layout/QuickAddModal.svelte";
+  import PWAInstallBanner from "$lib/components/layout/PWAInstallBanner.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar";
   import { appStore } from "$lib/stores/app.svelte";
   import { goto } from "$app/navigation";
@@ -34,6 +35,7 @@
     
     <CommandPalette />
     <QuickAddModal />
+    <PWAInstallBanner />
   </div>
 </Sidebar.Provider>
 

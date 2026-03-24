@@ -15,6 +15,8 @@
 	import Save from '@lucide/svelte/icons/save';
 	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import { lockStore, hashPin } from '$lib/stores/lock.svelte';
+	import PINSetupDialog from '$lib/components/security/PINSetupDialog.svelte';
+  import * as AlertDialog from "$lib/components/ui/alert-dialog";
 
 	// Clone settings to form to avoid auto-updating until saved
 	let formSettings = $state({
@@ -28,6 +30,8 @@
 	});
 
 	let isSaving = $state(false);
+	let showPINSetup = $state(false);
+	let showDisableConfirm = $state(false);
 
 	async function saveSettings() {
 		isSaving = true;
@@ -138,24 +142,12 @@
 					</div>
 					<button
 						type="button"
-						onclick={async (e) => {
-							e.stopPropagation();
-							console.log('PIN Toggle Clicked, current state:', formSettings.pinEnabled);
+						aria-label="PIN Protection Toggle"
+						onclick={() => {
 							if (!formSettings.pinEnabled) {
-								const pinInput = prompt('Enter a 4-digit PIN:');
-								if (pinInput && pinInput.length === 4) {
-									const h = await hashPin(pinInput);
-									formSettings.pinHash = h;
-									formSettings.pinEnabled = true;
-									alert('PIN successfully set!');
-								} else if (pinInput) {
-									alert('PIN must be exactly 4 digits.');
-								}
+								showPINSetup = true;
 							} else {
-								formSettings.pinEnabled = false;
-								formSettings.pinHash = undefined;
-								formSettings.biometricEnabled = false;
-								alert('PIN protection disabled.');
+								showDisableConfirm = true;
 							}
 						}}
 						class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {formSettings.pinEnabled
@@ -254,4 +246,35 @@
 			</div>
 		</CardContent>
 	</Card>
+
+	<PINSetupDialog
+		bind:open={showPINSetup}
+		onConfirm={(hash) => {
+			formSettings.pinHash = hash;
+			formSettings.pinEnabled = true;
+			console.log('PIN enabled in formSettings:', formSettings.pinEnabled);
+		}}
+	/>
+
+	<AlertDialog.Root bind:open={showDisableConfirm}>
+		<AlertDialog.Content>
+			<AlertDialog.Header>
+				<AlertDialog.Title>Disable PIN Protection?</AlertDialog.Title>
+				<AlertDialog.Description>
+					This will remove the requirement to enter a PIN when opening Lowo. Biometric auth will also be disabled.
+				</AlertDialog.Description>
+			</AlertDialog.Header>
+			<AlertDialog.Footer>
+				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+				<AlertDialog.Action
+					onclick={() => {
+						formSettings.pinEnabled = false;
+						formSettings.pinHash = undefined;
+						formSettings.biometricEnabled = false;
+						showDisableConfirm = false;
+					}}>Confirm</AlertDialog.Action
+				>
+			</AlertDialog.Footer>
+		</AlertDialog.Content>
+	</AlertDialog.Root>
 </div>

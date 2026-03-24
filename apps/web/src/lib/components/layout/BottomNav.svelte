@@ -43,7 +43,7 @@
             <button class="fixed inset-0 z-40 bg-black/30" onclick={() => fabOpen = false} aria-label="Close"></button>
 
             <!-- Expense option (left) -->
-            <div class="absolute bottom-[20px] left-1/2 -translate-x-[90px] z-50 flex flex-col items-center gap-1.5 animate-in fade-in slide-in-from-right-4 duration-200">
+            <div class="absolute bottom-[48px] left-1/2 -translate-x-[90px] z-50 flex flex-col items-center gap-1.5 animate-in fade-in slide-in-from-right-4 duration-200">
               <button
                 onclick={openExpense}
                 class="flex h-12 w-12 items-center justify-center rounded-full bg-destructive shadow-xl hover:scale-110 active:scale-90 transition-transform"
@@ -55,7 +55,7 @@
             </div>
 
             <!-- Income option (right) -->
-            <div class="absolute bottom-[20px] left-1/2 translate-x-[42px] z-50 flex flex-col items-center gap-1.5 animate-in fade-in slide-in-from-left-4 duration-200">
+            <div class="absolute bottom-[48px] left-1/2 translate-x-[42px] z-50 flex flex-col items-center gap-1.5 animate-in fade-in slide-in-from-left-4 duration-200">
               <button
                 onclick={openIncome}
                 class="flex h-12 w-12 items-center justify-center rounded-full bg-primary shadow-xl hover:scale-110 active:scale-90 transition-transform"

@@ -47,14 +47,14 @@
 
   <div class="flex items-center space-x-2 ml-auto mr-3">
     <button
-      onclick={() => appStore.showQuickAdd = true}
+      onclick={() => goto('/expenses')}
       class="flex h-8 items-center space-x-1 rounded-full bg-destructive/10 px-2.5 text-destructive transition-colors hover:bg-destructive/20 active:scale-95"
     >
       <TrendingDown class="h-3.5 w-3.5" />
       <span class="text-[10px] font-bold uppercase tracking-wider">Expense</span>
     </button>
     <button
-      onclick={() => appStore.showQuickAddIncome = true}
+      onclick={() => goto('/income')}
       class="flex h-8 items-center space-x-1 rounded-full bg-primary/10 px-2.5 text-primary transition-colors hover:bg-primary/20 active:scale-95"
     >
       <Banknote class="h-3.5 w-3.5" />

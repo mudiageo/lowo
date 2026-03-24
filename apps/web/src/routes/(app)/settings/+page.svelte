@@ -138,18 +138,24 @@
 					</div>
 					<button
 						type="button"
-						onclick={async () => {
+						onclick={async (e) => {
+							e.stopPropagation();
+							console.log('PIN Toggle Clicked, current state:', formSettings.pinEnabled);
 							if (!formSettings.pinEnabled) {
-								const pin = prompt('Enter a 4-digit PIN:');
-								if (pin?.length === 4) {
-									const h = await hashPin(pin);
+								const pinInput = prompt('Enter a 4-digit PIN:');
+								if (pinInput && pinInput.length === 4) {
+									const h = await hashPin(pinInput);
 									formSettings.pinHash = h;
 									formSettings.pinEnabled = true;
+									alert('PIN successfully set!');
+								} else if (pinInput) {
+									alert('PIN must be exactly 4 digits.');
 								}
 							} else {
 								formSettings.pinEnabled = false;
 								formSettings.pinHash = undefined;
 								formSettings.biometricEnabled = false;
+								alert('PIN protection disabled.');
 							}
 						}}
 						class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none {formSettings.pinEnabled

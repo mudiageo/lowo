@@ -2,6 +2,7 @@
 	import './layout.css';
 	import { onMount } from 'svelte';
 	import { pwaStore } from '$lib/stores/pwa.svelte';
+	import { ModeWatcher } from "mode-watcher";
 
 	let { children } = $props();
 
@@ -9,6 +10,8 @@
 		pwaStore.init();
 	});
 </script>
+
+<ModeWatcher />
 
 <svelte:head>
 	<link rel="icon" href="/favicon.svg" type="image/svg+xml" />

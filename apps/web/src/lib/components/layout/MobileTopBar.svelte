@@ -30,7 +30,6 @@
     if (!appStore.settings) return;
     const next = appStore.settings.theme === 'dark' ? 'light' : 'dark';
     appStore.updateSettings({ theme: next });
-    document.documentElement.classList.toggle('dark', next === 'dark');
     dropdownOpen = false;
   }
 </script>

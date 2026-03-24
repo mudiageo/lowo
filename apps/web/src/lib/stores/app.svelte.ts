@@ -1,6 +1,7 @@
 import { db } from "../db";
 import type { AppSettings, BudgetPeriod } from "../db/schema";
 import { liveQuery } from "dexie";
+import { setMode } from "mode-watcher";
 
 export class AppStore {
   settings: AppSettings | null = $state(null);
@@ -24,6 +25,9 @@ export class AppStore {
     const settings = await db.appSettings.get("singleton");
     if (settings) {
       this.settings = settings;
+      if (settings.theme) {
+        setMode(settings.theme as any);
+      }
     } else {
       // Defaults
       this.settings = {
@@ -36,11 +40,15 @@ export class AppStore {
         aiEnabled: false,
       };
       await db.appSettings.put(this.settings);
+      setMode("system");
     }
 
     // Subscribe to settings changes
     liveQuery(() => db.appSettings.get("singleton")).subscribe((s) => {
-      if (s) this.settings = s;
+      if (s) {
+        this.settings = s;
+        if (s.theme) setMode(s.theme as any);
+      }
     });
 
     this.initialized = true;
@@ -49,7 +57,12 @@ export class AppStore {
   async updateSettings(updates: Partial<AppSettings>) {
     if (!this.settings) return;
     const newSettings = { ...this.settings, ...updates };
+    this.settings = newSettings; // Update local state immediately to avoid race conditions
     await db.appSettings.put(newSettings);
+
+    if (updates.theme) {
+      setMode(updates.theme as any);
+    }
   }
 }
 

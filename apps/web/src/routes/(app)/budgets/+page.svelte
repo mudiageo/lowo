@@ -11,6 +11,9 @@
 	import DynamicIcon from '$lib/components/ui/DynamicIcon.svelte';
 	import Plus from '@lucide/svelte/icons/plus';
 	import Copy from '@lucide/svelte/icons/copy';
+	import Edit2 from '@lucide/svelte/icons/edit-2';
+	import CategoryEditForm from '$lib/components/features/budget/CategoryEditForm.svelte';
+	import type { BudgetCategory } from '$lib/db/schema';
 
 	const formatter = $derived(
 		new Intl.NumberFormat('en-NG', {
@@ -21,6 +24,13 @@
 	);
 
 	let isModalOpen = $state(false);
+	let isCategoryModalOpen = $state(false);
+	let editingCategory = $state<BudgetCategory | null>(null);
+
+	function openCategoryEdit(cat: BudgetCategory) {
+		editingCategory = cat;
+		isCategoryModalOpen = true;
+	}
 </script>
 
 <svelte:head>
@@ -115,11 +125,21 @@
 							<p class="text-xs text-muted-foreground">{catProg.percentage}% spent</p>
 						</div>
 					</div>
-					<div class="text-right">
-						<p class="font-mono text-sm">{formatter.format(catProg.spent)}</p>
-						<p class="font-mono text-xs text-muted-foreground">
-							/ {formatter.format(catProg.allocated)}
-						</p>
+					<div class="flex items-center gap-4">
+						<div class="text-right">
+							<p class="font-mono text-sm">{formatter.format(catProg.spent)}</p>
+							<p class="font-mono text-xs text-muted-foreground">
+								/ {formatter.format(catProg.allocated)}
+							</p>
+						</div>
+						<Button
+							variant="ghost"
+							size="icon"
+							class="h-8 w-8 text-muted-foreground"
+							onclick={() => openCategoryEdit(catProg.category)}
+						>
+							<Edit2 class="h-3.5 w-3.5" />
+						</Button>
 					</div>
 				</div>
 			{/each}
@@ -133,4 +153,17 @@
 	bind:open={isModalOpen}
 >
 	<BudgetForm onSaveSuccess={() => (isModalOpen = false)} />
+</ResponsiveFormModal>
+
+<ResponsiveFormModal
+	title="Edit Category"
+	description="Update the name and allocation for this category."
+	bind:open={isCategoryModalOpen}
+>
+	{#if editingCategory}
+		<CategoryEditForm
+			category={editingCategory}
+			onSaveSuccess={() => (isCategoryModalOpen = false)}
+		/>
+	{/if}
 </ResponsiveFormModal>

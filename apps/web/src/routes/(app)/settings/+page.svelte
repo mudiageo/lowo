@@ -37,14 +37,6 @@
 		isSaving = true;
 		try {
 			await appStore.updateSettings(formSettings);
-
-			// Apply theme
-			if (formSettings.theme === 'dark') {
-				document.documentElement.classList.add('dark');
-			} else {
-				document.documentElement.classList.remove('dark');
-			}
-
 			alert('Settings saved successfully.');
 		} catch (e) {
 			alert('Failed to save settings.');

@@ -107,7 +107,7 @@
         <span>Export Data</span>
       </Command.Item>
       {#if appStore.settings?.aiEnabled}
-        <Command.Item onSelect={() => runCommand(generateAiInsights)}>
+        <Command.Item onSelect={() => runCommand(() => goto('/insights'))}>
           <Sparkles class="mr-2 h-4 w-4" />
           <span>Generate AI Insights</span>
         </Command.Item>

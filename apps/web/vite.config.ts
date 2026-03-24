@@ -1,11 +1,14 @@
 import devtoolsJson from "vite-plugin-devtools-json";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite-plus";
 import { playwright } from "@vitest/browser-playwright";
 import { sveltekit } from "@sveltejs/kit/vite";
 
 export default defineConfig({
   plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
+  ssr: {
+    noExternal: ["bits-ui"],
+  },
   test: {
     expect: { requireAssertions: true },
     projects: [

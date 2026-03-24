@@ -61,14 +61,14 @@
         maxlength={4}
         bind:value={pin}
         onComplete={handleComplete}
-        class="gap-2"
       >
-        <InputOTP.Group>
-          <InputOTP.Slot index={0} />
-          <InputOTP.Slot index={1} />
-          <InputOTP.Slot index={2} />
-          <InputOTP.Slot index={3} />
-        </InputOTP.Group>
+        {#snippet children({ cells })}
+          <InputOTP.Group>
+            {#each cells as cell}
+              <InputOTP.Slot {cell} />
+            {/each}
+          </InputOTP.Group>
+        {/snippet}
       </InputOTP.Root>
 
       {#if error}

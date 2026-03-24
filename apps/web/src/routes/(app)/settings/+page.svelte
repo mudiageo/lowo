@@ -16,7 +16,7 @@
 	import Trash2 from '@lucide/svelte/icons/trash-2';
 	import { lockStore, hashPin } from '$lib/stores/lock.svelte';
 	import PINSetupDialog from '$lib/components/security/PINSetupDialog.svelte';
-  import * as AlertDialog from "$lib/components/ui/alert-dialog";
+	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 
 	// Clone settings to form to avoid auto-updating until saved
 	let formSettings = $state({
@@ -170,6 +170,7 @@
 						</div>
 						<button
 							type="button"
+							aria-label="enable biometrics"
 							onclick={async () => {
 								if (!formSettings.biometricEnabled) {
 									const ok = await lockStore.registerBiometric();
@@ -249,10 +250,15 @@
 
 	<PINSetupDialog
 		bind:open={showPINSetup}
-		onConfirm={(hash) => {
+		onConfirm={async (hash) => {
 			formSettings.pinHash = hash;
 			formSettings.pinEnabled = true;
-			console.log('PIN enabled in formSettings:', formSettings.pinEnabled);
+			// Immediately persist security state so biometrics can check it
+			await appStore.updateSettings({
+				pinEnabled: true,
+				pinHash: hash
+			});
+			console.log('PIN enabled in formSettings and DB:', formSettings.pinEnabled);
 		}}
 	/>
 
@@ -261,17 +267,24 @@
 			<AlertDialog.Header>
 				<AlertDialog.Title>Disable PIN Protection?</AlertDialog.Title>
 				<AlertDialog.Description>
-					This will remove the requirement to enter a PIN when opening Lowo. Biometric auth will also be disabled.
+					This will remove the requirement to enter a PIN when opening Lowo. Biometric auth will
+					also be disabled.
 				</AlertDialog.Description>
 			</AlertDialog.Header>
 			<AlertDialog.Footer>
 				<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 				<AlertDialog.Action
-					onclick={() => {
+					onclick={async () => {
 						formSettings.pinEnabled = false;
 						formSettings.pinHash = undefined;
 						formSettings.biometricEnabled = false;
+						await appStore.updateSettings({
+							pinEnabled: false,
+							pinHash: undefined,
+							biometricEnabled: false
+						});
 						showDisableConfirm = false;
+						console.log('PIN disabled in formSettings and DB');
 					}}>Confirm</AlertDialog.Action
 				>
 			</AlertDialog.Footer>

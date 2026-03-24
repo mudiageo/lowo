@@ -22,7 +22,7 @@
 
 	let label = $state('');
 	let amount = $state('');
-	let frequency = $state<'one_time' | 'weekly' | 'monthly' | 'yearly' | irregular>('one_time');
+	let frequency = $state<'one_time' | 'weekly' | 'biweekly' | 'monthly' | 'yearly' | 'irregular'>('one_time');
 	let incomeDate = $state(new Date().toISOString().split('T')[0]);
 	let isAdding = $state(false);
 	let isModalOpen = $state(false);
@@ -163,7 +163,6 @@
 				<option value="monthly">Monthly</option>
 				<option value="yearly">Yearly</option>
 				<option value="irregular">Irregular</option>
-				<option value="yearly">Yearly</option>
 			</select>
 		</div>
 

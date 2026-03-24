@@ -5,6 +5,7 @@
 	import Zap from '@lucide/svelte/icons/zap';
 	import Sparkles from '@lucide/svelte/icons/sparkles';
 	import Wallet from '@lucide/svelte/icons/wallet';
+	import Play from '@lucide/svelte/icons/play';
 	import { appStore } from '$lib/stores/app.svelte';
 
 	const getStartedLink = $derived(
@@ -83,13 +84,22 @@
 						<ArrowRight class="ml-2 h-5 w-5" />
 					</Button>
 					<Button
+						href="#"
+						variant="secondary"
+						size="lg"
+						class="text-md h-14 rounded-full px-8"
+					>
+						<Play class="mr-2 h-5 w-5 fill-current" />
+						Watch Demo
+					</Button>
+					<Button
 						href="https://github.com/mudiageo/lowo"
-						variant="outline"
+						variant="ghost"
 						size="lg"
 						class="text-md h-14 rounded-full px-8"
 						target="_blank"
 					>
-						View Source Code
+						View Source
 					</Button>
 				</div>
 			</div>

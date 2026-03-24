@@ -8,6 +8,8 @@
   import Sun from "@lucide/svelte/icons/sun";
   import Sparkles from "@lucide/svelte/icons/sparkles";
   import LogOut from "@lucide/svelte/icons/log-out";
+  import TrendingDown from "@lucide/svelte/icons/trending-down";
+  import Banknote from "@lucide/svelte/icons/banknote";
 
   let dropdownOpen = $state(false);
 
@@ -41,6 +43,23 @@
       <Sparkles class="h-4 w-4 text-primary-foreground" />
     </div>
     <span class="font-heading font-bold text-base tracking-tight">{pageTitle()}</span>
+  </div>
+
+  <div class="flex items-center space-x-2 ml-auto mr-3">
+    <button
+      onclick={() => appStore.showQuickAdd = true}
+      class="flex h-8 items-center space-x-1 rounded-full bg-destructive/10 px-2.5 text-destructive transition-colors hover:bg-destructive/20 active:scale-95"
+    >
+      <TrendingDown class="h-3.5 w-3.5" />
+      <span class="text-[10px] font-bold uppercase tracking-wider">Expense</span>
+    </button>
+    <button
+      onclick={() => appStore.showQuickAddIncome = true}
+      class="flex h-8 items-center space-x-1 rounded-full bg-primary/10 px-2.5 text-primary transition-colors hover:bg-primary/20 active:scale-95"
+    >
+      <Banknote class="h-3.5 w-3.5" />
+      <span class="text-[10px] font-bold uppercase tracking-wider">Income</span>
+    </button>
   </div>
 
   <!-- User avatar / settings trigger -->

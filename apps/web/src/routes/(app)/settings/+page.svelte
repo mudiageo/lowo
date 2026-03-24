@@ -138,14 +138,13 @@
 					</div>
 					<button
 						type="button"
-						onclick={() => {
+						onclick={async () => {
 							if (!formSettings.pinEnabled) {
 								const pin = prompt('Enter a 4-digit PIN:');
 								if (pin?.length === 4) {
-									hashPin(pin).then((h) => {
-										formSettings.pinHash = h;
-										formSettings.pinEnabled = true;
-									});
+									const h = await hashPin(pin);
+									formSettings.pinHash = h;
+									formSettings.pinEnabled = true;
 								}
 							} else {
 								formSettings.pinEnabled = false;

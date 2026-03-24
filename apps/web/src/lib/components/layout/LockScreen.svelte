@@ -41,6 +41,20 @@
     if (!ok) error = 'Biometric failed. Enter your PIN.';
     isChecking = false;
   }
+
+  // Handle keyboard input
+  $effect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (isChecking) return;
+      if (e.key >= '0' && e.key <= '9') {
+        press(e.key);
+      } else if (e.key === 'Backspace') {
+        press('⌫');
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
 </script>
 
 <!-- Full-screen lock overlay -->

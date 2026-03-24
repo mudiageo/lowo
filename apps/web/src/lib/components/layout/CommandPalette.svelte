@@ -22,7 +22,7 @@
       }
       // Simple keyboard shortcuts to routes
       if (!open && e.target === document.body) {
-        if (e.key.toLowerCase() === 'n') goto('/expenses/add');
+        if (e.key.toLowerCase() === 'n') appStore.showQuickAdd = true;
         if (e.key.toLowerCase() === 'b') goto('/budgets');
         if (e.key.toLowerCase() === 's') goto('/savings');
       }
@@ -56,7 +56,7 @@
     <Command.Empty>No results found.</Command.Empty>
     
     <Command.Group heading="Quick Actions">
-      <Command.Item onSelect={() => runCommand(() => goto('/expenses/add'))}>
+      <Command.Item onSelect={() => runCommand(() => appStore.showQuickAdd = true)}>
         <Plus class="mr-2 h-4 w-4" />
         <span>New Expense</span>
         <Command.Shortcut>N</Command.Shortcut>
@@ -107,7 +107,7 @@
         <span>Export Data</span>
       </Command.Item>
       {#if appStore.settings?.aiEnabled}
-        <Command.Item onSelect={() => runCommand(() => goto('/insights'))}>
+        <Command.Item onSelect={() => runCommand(generateAiInsights)}>
           <Sparkles class="mr-2 h-4 w-4" />
           <span>Generate AI Insights</span>
         </Command.Item>

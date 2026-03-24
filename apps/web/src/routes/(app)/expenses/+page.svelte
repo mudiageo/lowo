@@ -2,14 +2,12 @@
 	import { db } from '$lib/db';
 	import { budgetStore } from '$lib/stores/budget.svelte';
 	import { appStore } from '$lib/stores/app.svelte';
-	import * as v from 'valibot';
-	import { CreateExpenseSchema } from '$lib/features/expense/schemas';
 	import { liveQuery } from 'dexie';
-	import { Card, CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
+	import { Card } from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
 	import ResponsiveFormModal from '$lib/components/layout/ResponsiveFormModal.svelte';
+	import ExpenseForm from '$lib/components/features/expense/ExpenseForm.svelte';
 	import Plus from '@lucide/svelte/icons/plus';
 	import Search from '@lucide/svelte/icons/search';
 	import Filter from '@lucide/svelte/icons/filter';
@@ -22,12 +20,6 @@
 		})
 	);
 
-	let amount = $state('');
-	let categoryId = $state('');
-	let notes = $state('');
-	let paymentMethod = $state<'cash' | 'transfer' | 'card' | 'ussd'>('transfer');
-	let expenseDate = $state(new Date().toISOString().split('T')[0]);
-	let isAdding = $state(false);
 	let isModalOpen = $state(false);
 
 	// Load recent expenses for active period
@@ -49,50 +41,6 @@
 		});
 	});
 
-	async function quickAdd() {
-		if (!budgetStore.activePeriodId) {
-			alert('Select an active budget period first.');
-			return;
-		}
-
-		const payload = {
-			categoryId,
-			amount: Number(amount),
-			date: new Date(expenseDate),
-			paymentMethod,
-			notes: notes || undefined
-		};
-
-		const result = v.safeParse(CreateExpenseSchema, payload);
-		if (!result.success) {
-			alert('Invalid input: ' + result.issues[0].message);
-			return;
-		}
-
-		try {
-			isAdding = true;
-			await db.expenses.add({
-				id: crypto.randomUUID(),
-				budgetPeriodId: budgetStore.activePeriodId,
-				categoryId: result.output.categoryId,
-				amount: result.output.amount,
-				date: result.output.date,
-				notes: result.output.notes,
-				paymentMethod: result.output.paymentMethod,
-				createdAt: new Date(),
-				updatedAt: new Date()
-			});
-			// Reset form & close modal
-			amount = '';
-			notes = '';
-			isModalOpen = false;
-		} catch (e) {
-			console.error(e);
-			alert('Failed to add expense');
-		} finally {
-			isAdding = false;
-		}
-	}
 </script>
 
 <div class="space-y-6 pb-24 md:pb-6">
@@ -135,7 +83,7 @@
 										<div class="mt-0.5 flex items-center space-x-2 text-xs text-muted-foreground">
 											<span>{expense.category?.name}</span>
 											<span>•</span>
-											<span>{expense.paymentMethod.replace('_', ' ')}</span>
+											<span class="capitalize">{expense.paymentMethod.replace('_', ' ')}</span>
 										</div>
 									</div>
 								</div>
@@ -168,67 +116,5 @@
 	description="Quickly add a new transaction manually."
 	bind:open={isModalOpen}
 >
-	<form
-		onsubmit={(e) => {
-			e.preventDefault();
-			quickAdd();
-		}}
-		class="space-y-4"
-	>
-		<div class="space-y-2">
-			<Label>Amount</Label>
-			<Input type="number" bind:value={amount} placeholder="e.g. 1500" required />
-		</div>
-
-		<div class="space-y-2">
-			<Label>Category</Label>
-			<select
-				bind:value={categoryId}
-				class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-				required
-			>
-				<option value="" disabled selected>Select Category</option>
-				{#each budgetStore.categories as cat}
-					<option value={cat.id}>{cat.name}</option>
-				{/each}
-			</select>
-		</div>
-
-		<div class="space-y-2">
-			<Label>Date</Label>
-			<Input type="date" bind:value={expenseDate} required />
-		</div>
-
-		<div class="space-y-2">
-			<Label>Payment Method</Label>
-			<select
-				bind:value={paymentMethod}
-				class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-				required
-			>
-				<option value="cash">Cash</option>
-				<option value="transfer">Bank Transfer</option>
-				<option value="card">Card / POS</option>
-				<option value="ussd">USSD</option>
-			</select>
-		</div>
-
-		<div class="space-y-2">
-			<Label>Notes (Optional)</Label>
-			<Input bind:value={notes} placeholder="e.g. Uber to work" />
-		</div>
-
-		<Button type="submit" class="w-full mt-4" disabled={isAdding || !budgetStore.activePeriodId}>
-			{#if isAdding}
-				Saving...
-			{:else}
-				<Plus class="mr-2 h-4 w-4" /> Save Expense
-			{/if}
-		</Button>
-		{#if !budgetStore.activePeriodId}
-			<p class="mt-2 text-center text-xs text-destructive">
-				No active budget period. Create one first.
-			</p>
-		{/if}
-	</form>
+	<ExpenseForm onSaveSuccess={() => isModalOpen = false} />
 </ResponsiveFormModal>

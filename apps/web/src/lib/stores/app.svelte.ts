@@ -7,6 +7,7 @@ export class AppStore {
   activePeriod: BudgetPeriod | null = $state(null);
   isOnline: boolean = $state(true);
   initialized: boolean = $state(false);
+  showQuickAdd: boolean = $state(false);
 
   constructor() {
     this.init();

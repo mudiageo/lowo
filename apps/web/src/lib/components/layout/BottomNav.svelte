@@ -20,13 +20,13 @@
   <div class="flex items-center justify-around px-2 h-16 relative">
     {#each links as link}
       {#if link.isFab}
-        <a 
-          href={link.href}
-          class="absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 bg-primary text-primary-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+        <button 
+          onclick={() => appStore.showQuickAdd = true}
+          class="absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 bg-primary text-primary-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform"
           aria-label={link.label}
         >
-          <link.icon size={24} />
-        </a>
+          <Plus size={24} />
+        </button>
       {:else}
         <a 
           href={link.href}

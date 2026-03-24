@@ -2,6 +2,7 @@
   import DesktopSidebar from "$lib/components/layout/DesktopSidebar.svelte";
   import BottomNav from "$lib/components/layout/BottomNav.svelte";
   import CommandPalette from "$lib/components/layout/CommandPalette.svelte";
+  import QuickAddModal from "$lib/components/layout/QuickAddModal.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar";
   import { appStore } from "$lib/stores/app.svelte";
   import { goto } from "$app/navigation";
@@ -32,6 +33,7 @@
     <BottomNav />
     
     <CommandPalette />
+    <QuickAddModal />
   </div>
 </Sidebar.Provider>
 

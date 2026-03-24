@@ -1,7 +1,7 @@
 import { db } from '../db';
 import type { BudgetPeriod, BudgetCategory, Expense } from '../db/schema';
 import { liveQuery } from 'dexie';
-import { getBudgetPeriodDates, getCurrentActivePeriod, getSpendingProgress, type CategoryProgress } from '../features/budget/utils';
+import { getBudgetPeriodDates, getCurrentActivePeriod, getSpendingProgress, type CategoryProgress } from '../features/budget/utils.js';
 
 export class BudgetStore {
   periods: BudgetPeriod[] = $state([]);
@@ -20,6 +20,7 @@ export class BudgetStore {
       if (!this.activePeriodId && periods.length > 0) {
         const active = getCurrentActivePeriod(periods);
         this.activePeriodId = active ? active.id : periods[0].id; // default to most recent
+        this.loadActivePeriodData();
       }
     });
 
@@ -36,7 +37,7 @@ export class BudgetStore {
   // Effect method to be called when activePeriodId changes to load related data
   async loadActivePeriodData() {
     if (!this.activePeriodId) return;
-    
+
     // Subscribe to categories and expenses for active period
     liveQuery(() => db.budgetCategories.where('budgetPeriodId').equals(this.activePeriodId!).toArray()).subscribe(cats => {
       this.categories = cats;
@@ -52,7 +53,7 @@ export class BudgetStore {
     if (!this.activePeriod) return { categories: [], totalBudget: 0, totalSpent: 0, percentage: 0 };
     return getSpendingProgress(this.activePeriod, this.categories, this.expenses);
   }
-  
+
   setActivePeriod(id: string) {
     this.activePeriodId = id;
     this.loadActivePeriodData();

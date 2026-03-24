@@ -92,7 +92,7 @@
     try {
       await db.savingsContributions.add({
         id: crypto.randomUUID(),
-        savingsGoalId: goalId,
+        goalId: goalId,
         amount: Number(contributeAmount),
         date: new Date(),
         createdAt: new Date()

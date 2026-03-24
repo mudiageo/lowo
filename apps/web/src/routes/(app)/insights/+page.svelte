@@ -52,9 +52,16 @@
 
 			const prompt = `
         You are Lowo, a financial advisor for a Nigerian user. 
-        Analyze the following financial data and provide exactly 3 concise, actionable insights or recommendations.
-        Format your response in Markdown with bullet points. Be encouraging but realistic.
-        Do not use code blocks for the output, just bold text and bullet points.
+        Analyze the following financial data and provide:
+        1. A "Financial Personality" card (e.g. "The Vigilant Saver", "The Lifestyle Strategist") with a one-sentence description.
+        2. Exactly 3 concise, actionable insights or recommendations.
+        
+        Format your response in Markdown:
+        - Use ## for the Personality Title
+        - Use > for the personality description
+        - Use bullet points for the 3 insights.
+        
+        Be encouraging but realistic. Nigerian context: focus on relatable tips like "Bulk buying in the market", "Managing airtime/data", "Power/NEPA budgeting".
         
         Data context:
         ${JSON.stringify(contextData, null, 2)}
@@ -136,7 +143,13 @@
 								<div>
 									<!-- Simple markdown rendering for MVP. Real app would use a markdown parser -->
 									{#each latestInsight.content.split('\n') as line}
-										{#if line.startsWith('**')}
+										{#if line.startsWith('##')}
+											<h3 class="mt-6 mb-2 text-xl font-bold text-primary">{line.replace(/^##\s*/, '').replace(/\*\*/g, '')}</h3>
+										{:else if line.trim().startsWith('>')}
+											<div class="mb-6 p-4 bg-primary/5 border-l-4 border-primary italic text-muted-foreground">
+												{line.replace(/^>\s*/, '').replace(/\*\*/g, '')}
+											</div>
+										{:else if line.startsWith('**') || (line.includes('**') && line.length < 50)}
 											<p class="mt-3 font-bold text-foreground">{line.replace(/\*\*/g, '')}</p>
 										{:else if line.trim().startsWith('* ') || line.trim().startsWith('- ')}
 											<li class="mb-2 ml-4 text-muted-foreground">

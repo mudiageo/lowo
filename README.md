@@ -25,7 +25,7 @@ This project uses `vp` (Vite+) as the global toolchain.
 
 ### Prerequisites
 
-Install `vp` (Vite+) once, open a new terminal session, then run `vp help`.
+Install `vp` (Vite+) globally if you haven't already done so
 
 **macOS / Linux**
 ```bash

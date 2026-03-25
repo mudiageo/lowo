@@ -5,10 +5,9 @@ Lowo is a Nigerian-context personal budget planner designed to act like a robust
 ## Tech Stack
 
 This project was built utilizing cutting-edge web technologies:
-
 - **Framework**: [SvelteKit 2](https://kit.svelte.dev/) with **Svelte 5 Runes** (compiled natively, no virtual DOM).
-- **Toolchain**: [Vite+](https://vitejs.dev/) monorepo structure.
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & [shadcn-svelte](https://www.shadcn-svelte.com/) using raw Oklch styling.
+- **Toolchain**: [Vite+](https://viteplus.dev/) monorepo structure.
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & [shadcn-svelte](https://www.shadcn-svelte.com/).
 - **Data Layer (Local)**: [Dexie.js](https://dexie.org/) for IndexedDB local-first storage.
 - **Validation**: [Valibot](https://valibot.dev/) for tiny, robust schema parsing.
 - **AI Integration**: [Google Generative AI](https://ai.google.dev/) executing directly in the client (`gemini-2.5-flash`).
